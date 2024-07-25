@@ -7,5 +7,5 @@ import "os-release/src/version"
 
 func main() {
     fmt.Println(app_name)
-    fmt.Println(osr_version.VERSION_TAG)
+    fmt.Println(version.VERSION_TAG)
 }

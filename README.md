@@ -2,7 +2,7 @@
 
 A basic tool to print specific `/etc/os-release` details and other checks.
 
-The following is intended to be the full:
+The following is intended to be the full set of operations:
 
 * `os-release` - print version of `os-release` query tool and help, exit `0`
 * `os-release id` - print `<ID>:<VERSION_ID>` , lower case
