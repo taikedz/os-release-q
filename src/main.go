@@ -8,4 +8,5 @@ import "os-release/src/version"
 func main() {
     fmt.Println(app_name)
     fmt.Println(version.VERSION_TAG)
+    Parse_args()
 }
