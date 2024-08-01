@@ -10,12 +10,7 @@ The following is intended to be the full set of operations:
 * `os-release family` - print `<ID_LIKE>` if present, else print `<ID>`, always lower case
 * options
     * `--qualify` - pre-pend "`wsl `" or "`mingw `" as relevant
-    * WSL is identified by `uname -r` being in kernel name
-    * MinGW is identified by `MINGW` in `uname -s` output
-* Errors
-    * exit `98` if `/etc/os-release` is not found
-    * exit `99` if `/etc/os-release` does not have any of `NAME`, `ID`, `VERSION_ID`
-    * exit `100` if `uname` failed to run
+    * WSL is identified by environment vairable "WSLENV" being defined
 
 ## Motivation
 
