@@ -6,7 +6,20 @@ import "fmt"
 import "os-release/src/version"
 
 func main() {
-    fmt.Println(app_name)
-    fmt.Println(version.VERSION_TAG)
-    Parse_args()
+    var qualify bool
+    var action string
+    qualify, action = get_action()
+
+    if qualify {
+        fmt.Println("Qualify me")
+    }
+
+    switch action {
+    case "":
+        fmt.Println(app_name, version.VERSION_TAG)
+    case "id":
+        fmt.Println("Not implemented")
+    default:
+        fmt.Println("Unknown action", action)
+    }
 }

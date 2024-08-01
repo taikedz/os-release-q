@@ -6,7 +6,7 @@ build: bin/os-release
 run: bin/os-release
 	@bin/os-release
 
-bin/os-release: src/main.go
+bin/os-release: src/*.go
 	@(cd src; go build -o ../bin/os-release)
 
 
