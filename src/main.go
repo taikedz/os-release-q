@@ -3,7 +3,6 @@ package main
 import (
     "fmt"
     "strings"
-    "os"
 )
 
 // The module name 'os-release' comes from go.mod
@@ -11,9 +10,8 @@ import "os-release/src/version"
 
 func qualifiedPrint(qualify bool, message string) {
     var qualifier string = ""
-    _, ok := os.LookupEnv("WSLENV")
     
-    if qualify && ok {
+    if qualify && checkUnameContains([]string{"-r"}, "WSL") {
         qualifier = "wsl "
     }
 

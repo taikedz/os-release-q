@@ -9,8 +9,8 @@ The following is intended to be the full set of operations:
 * `os-release pretty` - print `<PRETTY_NAME>` if available, else `<NAME> <VERSION_ID>`
 * `os-release family` - print `<ID_LIKE>` if present, else print `<ID>`, always lower case
 * options
-    * `--qualify` - pre-pend "`wsl `" or "`mingw `" as relevant
-    * WSL is identified by environment vairable "WSLENV" being defined
+    * `--qualify` - pre-pend "`wsl `" as relevant
+    * WSL is identified by "WSL" being in the output of `uname -r`
 
 ## Motivation
 
