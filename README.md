@@ -2,6 +2,14 @@
 
 A basic tool to print specific `/etc/os-release` details and other checks.
 
+## Install
+
+Run `bash scripts/install.sh 0.0.2` to install from web
+
+Run `bash scripts/install.sh` to build and install. Requires `go` and `make`
+
+## Design
+
 The following is intended to be the full set of operations:
 
 * `os-release` - print version of `os-release` query tool and help, exit `0`
