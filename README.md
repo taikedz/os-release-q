@@ -12,13 +12,13 @@ Run `bash scripts/install.sh` to build and install. Requires `go` and `make`
 
 The following is intended to be the full set of operations:
 
-* `os-release` - print version of `os-release` query tool and help, exit `0`
-* `os-release id` - print `<ID>:<VERSION_ID>` , lower case
+* `os-release` - print `<ID>:<VERSION_ID>` , lower case
 * `os-release pretty` - print `<PRETTY_NAME>` if available, else `<NAME> <VERSION_ID>`
 * `os-release family` - print `<ID_LIKE>` if present, else print `<ID>`, always lower case
 * options
     * `--qualify` - pre-pend "`wsl `" as relevant
     * WSL is identified by "WSL" being in the output of `uname -r`
+* `os-release version` - print version of `os-release` query tool and help, exit `0`
 
 ## Motivation
 

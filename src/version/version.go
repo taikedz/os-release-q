@@ -5,7 +5,7 @@ package version
 
 // For a symbol to be visible externally, it must be capitalised
 
-const VERSION_TAG string = "0.0.2"
+const VERSION_TAG string = "0.1.0"
 
 func Version() string {
 	return VERSION_TAG

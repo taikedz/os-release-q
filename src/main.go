@@ -26,10 +26,10 @@ func main() {
 
     switch action {
     case "":
-        qualifiedPrint(qualify, app_name +" "+ version.VERSION_TAG)
-    case "id":
         osrel := loadOsRelease()
         qualifiedPrint(qualify, strings.ToLower(osrel["ID"] + ":" + osrel["VERSION_ID"]) )
+    case "version":
+        qualifiedPrint(qualify, app_name +" "+ version.VERSION_TAG)
     case "pretty":
         osrel := loadOsRelease()
         pretty, ok := osrel["PRETTY_NAME"]
