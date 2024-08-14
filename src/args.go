@@ -7,7 +7,7 @@ import (
 )
 
 func get_action() (bool, string) {
-    /* This library is a little stupid - the option flags MUST come before the positional args
+    /* This library is a little simplistic - the option flags MUST come before the positional args
      *
      * So
      *     os-release -qualify id
@@ -15,6 +15,9 @@ func get_action() (bool, string) {
      *     os-release id -qualify
      *
      * In the second form, `-qualify` becomes a literal positional argument
+     *
+     * The `-h` flag is implemented by default and mentions flags, but not positional arguments, as they
+     *   cannot seem to be documented ...
      */
 	var qualify bool
 	flag.BoolVar(&qualify, "qualify", false, "Whether to add a qualifier if non-Linux native (e.g. WSL)")
