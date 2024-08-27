@@ -12,7 +12,7 @@ if [[ -n "$1" ]]; then
         echo "Need 'curl' to download pre-compiled binary for v${1} from web."
     fi
 
-    curl "https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1" -O bin/os-release
+    curl -L "https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1" -o bin/os-release
 
 elif has go && has make; then
     make
@@ -34,6 +34,8 @@ if [[ ! -e "$TARGET" ]]; then
     mkdir -p "$TARGET"
 fi
 
-cp bin/os-release "$TARGET/"
+TARGET_BIN="$TARGET/os-release"
+cp bin/os-release "$TARGET_BIN"
+chmod 755 "$TARGET_BIN"
 
 echo "Done."

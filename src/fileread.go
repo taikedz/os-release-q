@@ -18,7 +18,7 @@ func readFileLines(path string) []string {
 
     for fileScanner.Scan() {
         ln := fileScanner.Text()
-        if ! (ln[0] == '#' || len(ln) == 0) {
+        if ! (len(ln) == 0 || ln[0] == '#') {
             lines = append(lines, ln)
         }
     }
