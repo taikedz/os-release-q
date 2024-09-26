@@ -6,9 +6,10 @@ build: bin/os-release
 run: bin/os-release
 	@bin/os-release
 
-bin/os-release: src/*.go
-	@(cd src; go build -o ../bin/os-release)
+bin/os-release: src/*.zig
+	mkdir bin
+	@(cd bin; zig build-exe ../src/os-release.zig)
 
 
 clean:
-	@echo no-op
+	rm -r bin/

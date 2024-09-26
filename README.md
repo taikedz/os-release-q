@@ -22,6 +22,4 @@ The following is intended to be the full set of operations:
 
 ## Motivation
 
-Primarily, to learn Go (lang), and do some basic handling.
-
 As a tool, it helps quickly identify a system type in a shell script, without needing to write `/etc/os-release` parsing and handlers.
