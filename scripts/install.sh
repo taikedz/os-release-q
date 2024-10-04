@@ -1,3 +1,5 @@
+set -euo pipefail
+
 HERE="$(dirname "$0")"
 
 cd "$HERE/.."
@@ -6,15 +8,23 @@ has() {
     which "$1" >/dev/null
 }
 
-if [[ -n "$1" ]]; then
-    mkdir -p bin
+if [[ -n "${1:-}" ]]; then
+    BUILD_DIR=./bin
+    mkdir -p "$BUILD_DIR"
+
     if ! has curl; then
         echo "Need 'curl' to download pre-compiled binary for v${1} from web."
     fi
 
-    curl -L "https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1" -o bin/os-release
+    curl -L "https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1" -o "$BUILD_DIR/os-release"
+
+    if [[ ! "$(file "$BUILD_DIR/os-release")" =~ ": ELF" ]]; then
+        echo "Could not download '$1'"
+        exit 1
+    fi
 
 elif has zig; then
+    BUILD_DIR=zig-out/bin
     zig build
 
 else
@@ -35,7 +45,7 @@ if [[ ! -e "$TARGET" ]]; then
 fi
 
 TARGET_BIN="$TARGET/os-release"
-cp zig-out/bin/os-release "$TARGET_BIN"
+cp "$BUILD_DIR/os-release" "$TARGET_BIN"
 chmod 755 "$TARGET_BIN"
 
 echo "Done."
