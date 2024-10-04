@@ -16,9 +16,11 @@ The following is intended to be the full set of operations:
 * `os-release version` - print `<VERSION_ID>`
 * `os-release pretty` - print `<PRETTY_NAME>` if available, else `<NAME> <VERSION_ID>`
 * `os-release family` - print `<ID_LIKE>` if present, else print `<ID>`
+* `os-release container` - print `wsl`, `container` or `none-detected` as relevant
+    * WSL is identified by "WSL" being in the output of `uname -r`
+    * Containerisation is identified by checking PID 1, and noting it being other than `init` or `systemd`. This is not necessarily reliable.
+    * `wsl` and `container` may both appear
 * options
-    * `--qualify` - pre-pend "`wsl `" as relevant
-        * WSL is identified by "WSL" being in the output of `uname -r`
     * `--lower-case`, `-l` - convert output to lower-case
 * `os-release -v` - print version of `os-release` query tool and help, exit with status zero
 
