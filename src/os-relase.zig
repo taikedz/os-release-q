@@ -1,6 +1,8 @@
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
 
+const osr_version = "0.3.0";
+
 const LineError = error {
     NotFound,
     NotValid
