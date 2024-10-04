@@ -1,2 +1,4 @@
 *.swp
 bin/
+.zig-cache/
+zig-out/

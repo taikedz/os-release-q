@@ -14,8 +14,8 @@ if [[ -n "$1" ]]; then
 
     curl -L "https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1" -o bin/os-release
 
-elif has go && has make; then
-    make
+elif has zig; then
+    zig build
 
 else
     echo "Cannot build locally. Specify a version like '0.0.2' ."
@@ -35,7 +35,7 @@ if [[ ! -e "$TARGET" ]]; then
 fi
 
 TARGET_BIN="$TARGET/os-release"
-cp bin/os-release "$TARGET_BIN"
+cp zig-out/bin/os-release "$TARGET_BIN"
 chmod 755 "$TARGET_BIN"
 
 echo "Done."

@@ -22,9 +22,13 @@ The following is intended to be the full set of operations:
     * `--lower-case`, `-l` - convert output to lower-case
 * `os-release -v` - print version of `os-release` query tool and help, exit with status zero
 
+## Local build
+
+Simply run `zig build` .
+
 ## Motivation
 
-As a tool, it helps quickly identify a system type in a shell script, without needing to write `/etc/os-release` parsing and handlers.
+As a tool, it helps quickly identify a system type in a shell script, without needing to write `/etc/os-release` parsing and handlers or polluting a script's variables.
 
 Include it in `.bashrc` to display a welcome message:
 
