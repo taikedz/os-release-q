@@ -13,13 +13,14 @@ Run `bash scripts/install.sh` to build and install. Requires Zig toolchain v0.13
 The following is intended to be the full set of operations:
 
 * `os-release` - print `<ID>:<VERSION_ID>`
+* `os-release version` - print `<VERSION_ID>`
 * `os-release pretty` - print `<PRETTY_NAME>` if available, else `<NAME> <VERSION_ID>`
 * `os-release family` - print `<ID_LIKE>` if present, else print `<ID>`
 * options
     * `--qualify` - pre-pend "`wsl `" as relevant
         * WSL is identified by "WSL" being in the output of `uname -r`
     * `--lower-case`, `-l` - convert output to lower-case
-* `os-release version` - print version of `os-release` query tool and help, exit with status zero
+* `os-release -v` - print version of `os-release` query tool and help, exit with status zero
 
 ## Motivation
 
@@ -35,15 +36,17 @@ Use it in multi-platform shell scripts:
 
 ```sh
 # Let `os-release` handle figuring out id/id_like values, etc
-#   and ensuring a deterministic lower-case output
+#   and ensuring lower-case output
 
-if [[ $(os-release family) = debian ]]; then
+FAM="$(os-release -l family)"
+
+if [[ "$FAM" = debian ]]; then
     # debian-like actions ...
     apt-get update && apt-get install -y htop
 
-elif [[ $(os-release family) = fedora ]]; then
+elif [[ "$FAM" =~ fedora ]]; then
     # fedora-like actions
-    if [[ $(os-release) -lt 31 ]]; then
+    if [[ $(os-release version) -lt 22 ]]; then
         yum install htop
     else
         dnf install htop
@@ -53,3 +56,4 @@ else
     echo "$(os-release pretty) not supported"
 fi
 ```
+
