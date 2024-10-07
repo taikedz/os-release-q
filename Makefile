@@ -11,4 +11,4 @@ bin/os-release: src/*.go
 
 
 clean:
-	@echo no-op
+	@(rm -r bin/)

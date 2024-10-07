@@ -16,7 +16,10 @@ if [[ -n "${1:-}" ]]; then
         echo "Need 'curl' to download pre-compiled binary for v${1} from web."
     fi
 
-    curl -L "https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1" -o bin/os-release
+    url="https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1"
+    echo "Downloading $url"
+
+    curl -L "$url" -o bin/os-release
     filetype="$(file bin/os-release)"
     if [[ "$filetype" =~ ASCII ]]; then
         (
