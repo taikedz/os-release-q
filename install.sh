@@ -4,8 +4,6 @@ set -euo pipefail
 
 HERE="$(dirname "$0")"
 
-cd "$HERE/.."
-
 has() {
     which "$1" >/dev/null
 }
