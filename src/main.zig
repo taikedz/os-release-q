@@ -1,4 +1,4 @@
-const osr_version = "0.2.0";
+const osr_version = "0.3.0";
 
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
