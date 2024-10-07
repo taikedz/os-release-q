@@ -34,7 +34,7 @@ elif has go && has make; then
     make
 
 else
-    echo "Cannot build locally. Specify a version like '0.1.1' ."
+    echo "Cannot build locally. Specify a version like '0.2.0' ."
     exit 1
 fi
 

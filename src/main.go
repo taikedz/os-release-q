@@ -8,45 +8,67 @@ import (
 // The module name 'os-release' comes from go.mod
 import "os-release/src/version"
 
-func qualifiedPrint(qualify bool, message string) {
-    var qualifier string = ""
-    
-    if qualify && checkUnameContains([]string{"-r"}, "WSL") {
-        qualifier = "wsl "
+func casePrintln(lowcase bool, message string) {
+    if lowcase {
+        message = strings.ToLower(message)
     }
 
-    fmt.Println(qualifier + message)
+    fmt.Println(message)
 }
 
 func main() {
-    var qualify bool
+    var ver_flag bool
+    var lowcase bool
     var action string
 
-    qualify, action = get_action()
+    ver_flag, lowcase, action = get_action()
+
+    if(ver_flag) {
+        casePrintln(lowcase, app_name+" "+version.VERSION_TAG)
+        return
+    }
+
+    osrel := loadOsRelease()
 
     switch action {
     case "":
-        osrel := loadOsRelease()
-        qualifiedPrint(qualify, strings.ToLower(osrel["ID"] + ":" + osrel["VERSION_ID"]) )
+        casePrintln(lowcase, strings.ToLower(osrel["ID"] + ":" + osrel["VERSION_ID"]) )
+
+    case "id":
+        casePrintln(lowcase, osrel["ID"])
+
     case "version":
-        qualifiedPrint(qualify, app_name +" "+ version.VERSION_TAG)
+        casePrintln(lowcase, osrel["VERSION_ID"])
+
     case "pretty":
-        osrel := loadOsRelease()
         pretty, ok := osrel["PRETTY_NAME"]
         if ok {
-            qualifiedPrint(qualify, pretty)
+            casePrintln(lowcase, pretty)
         } else {
-            qualifiedPrint(qualify, osrel["NAME"] + " " + osrel["VERSION_ID"])
+            casePrintln(lowcase, osrel["NAME"] + " " + osrel["VERSION_ID"])
         }
+
     case "family":
-        osrel := loadOsRelease()
         family, ok := osrel["ID_LIKE"]
         if ok {
-            qualifiedPrint(qualify, strings.ToLower(family) )
+            casePrintln(lowcase, strings.ToLower(family) )
         } else {
-            qualifiedPrint(qualify, strings.ToLower(osrel["ID"]) )
+            casePrintln(lowcase, strings.ToLower(osrel["ID"]) )
         }
+
+    case "container":
+        var containers strings.Builder
+        if checkUnameContains([]string{"-r"}, "WSL") {
+            containers.WriteString("WSL ")
+        }
+
+        if !pidNameIn(1, []string{"init", "systemd"}) {
+            containers.WriteString("Non-init")
+        }
+
+        casePrintln(lowcase, containers.String())
+
     default:
-        qualifiedPrint(qualify, "Unknown action: " + action)
+        casePrintln(lowcase, "Unknown action: " + action)
     }
 }
