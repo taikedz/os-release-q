@@ -80,7 +80,7 @@ fn find_value(key:[]const u8, lines:freader.Lines) LineError![]const u8 {
 
         // get slices left and right of "="
         const left = line[0..idx];
-        const right = std.mem.trim(u8, line[idx+1..], " \r\n");
+        const right = std.mem.trim(u8, line[idx+1..], " \"\r\n");
 
         // if left == key, return right
         if(std.mem.eql(u8, left, key)) return right;
