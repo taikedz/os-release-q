@@ -1,5 +1,6 @@
 const std = @import("std");
 
+const efail = @import("efail.zig");
 const osr_mem = @import("mem.zig");
 const own = osr_mem.own;
 
@@ -33,8 +34,7 @@ pub const Lines = struct {
 
 pub fn readFileLines(alloc:std.mem.Allocator, path:[]const u8) !Lines {
     var fh = std.fs.openFileAbsolute(path, .{}) catch {
-        std.debug.print("Could not open {s}", .{path});
-        std.process.exit(1);
+        efail.fail(1, "Could not open {s}", .{path});
     };
     defer fh.close();
 

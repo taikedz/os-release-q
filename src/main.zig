@@ -23,8 +23,23 @@ pub fn main() !void {
     const args = arguments.load_cli_args(&flags);
     var output:[]const u8 = undefined;
 
+    const fv = @intFromEnum(arguments.Flags.version);
+    if(flags & fv  == fv) {
+        std.debug.print("os-release {s}\n", .{osr_version});
+        std.process.exit(0);
+    }
+
+    const fl = @intFromEnum(arguments.Flags.lower);
+    var lower = false;
+    if(flags & fl  == fl) {
+        lower = true;
+    }
+
     switch(args) {
-        arguments.Mode.empty => {output = info.id;},
+        arguments.Mode.empty => {
+            var buf = [_]u8{undefined} ** 64;
+            output = try std.fmt.bufPrint(&buf, "{s}:{s}", .{info.id, info.version_id});
+        },
         arguments.Mode.name => {output = info.id;},
         arguments.Mode.version => {output = info.version_id;},
         arguments.Mode.pretty => {output = info.pretty_name;},
