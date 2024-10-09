@@ -8,10 +8,9 @@ pub fn build(b:*std.Build) void {
         .target = b.host,
     });
 
-    const ziglyph = b.dependency("ziglyph", .{
-        .target = b.host,
-    });
+    const ziglyph = b.dependency("ziglyph", .{});
     exe.root_module.addImport("ziglyph", ziglyph.module("ziglyph"));
 
     b.installArtifact(exe);
 }
+
