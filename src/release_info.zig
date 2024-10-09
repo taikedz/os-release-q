@@ -40,16 +40,17 @@ pub const OsInfo = struct {
 };
 
 pub fn extractReleaseInfo(alloc:std.mem.Allocator, lines:freader.Lines) !OsInfo {
-    // All the following are slices into `lines` values
     const id          = try find_value("ID", lines);
     const version_id  = try find_value("VERSION_ID", lines);
 
     var buffer = [_]u8{undefined}**32;
-    const default_pname = try std.fmt.bufPrint(&buffer, "[{s} {s}]", .{id, version_id});
+    const default_pname = try std.fmt.bufPrint(&buffer, "{s} {s}", .{id, version_id});
 
     const pretty_name = try find_value_defaulting("PRETTY_NAME", lines, default_pname);
     const id_like     = try find_value_defaulting("ID_LIKE", lines, id);
 
+    // All the above are slices into `lines` values
+    // Hence, we pass alloc into OsInfo.new to get it to own its data.
     return OsInfo.new(alloc, id, version_id, pretty_name, id_like);
 }
 
@@ -68,7 +69,7 @@ test {
 
     try std.testing.expectEqualStrings("zig", info.id);
     try std.testing.expectEqualStrings("0.13.0", info.version_id);
-    try std.testing.expectEqualStrings("[zig 0.13.0]", info.pretty_name);
+    try std.testing.expectEqualStrings("zig 0.13.0", info.pretty_name);
     try std.testing.expectEqualStrings("c", info.id_like);
 }
 

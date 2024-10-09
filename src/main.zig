@@ -1,7 +1,8 @@
-const osr_version = "0.3.0";
+const osr_version = "0.3.0"; // ALSO UPDATE build.zig.zon
 
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
+const ziglyph = @import("ziglyph");
 
 const etc_file = @import("etc_file.zig");
 const osr_info = @import("release_info.zig");
@@ -45,8 +46,15 @@ pub fn main() !void {
         arguments.Mode.pretty => {output = info.pretty_name;},
         arguments.Mode.family => {output = info.id_like;},
     }
-    // print desired mode
-    // if `-l` , then convert to lower-case
-    try stdout.print("{s}\n", .{output});
+
+    if (lower) {
+        output = try ziglyph.toLowerStr(alloc, output);
+        defer alloc.free(output);
+        // This is a new allocation, and defer-free is to the end of this "if" block
+        // So, we suffer some code duplication ...
+        try stdout.print("{s}\n", .{output});
+    } else {
+        try stdout.print("{s}\n", .{output});
+    }
 }
 
