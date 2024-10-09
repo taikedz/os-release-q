@@ -1,5 +1,6 @@
 const std = @import("std");
 
+const freader = @import("file_reader.zig");
 const osr_mem = @import("mem.zig");
 const own = osr_mem.own;
 
@@ -38,7 +39,7 @@ pub const OsInfo = struct {
     }
 };
 
-pub fn extract_release_info(alloc:std.mem.Allocator, lines:std.ArrayList([]const u8)) !OsInfo {
+pub fn extractReleaseInfo(alloc:std.mem.Allocator, lines:freader.Lines) !OsInfo {
     // All the following are slices into `lines` values
     const id          = try find_value("ID", lines);
     const version_id  = try find_value("VERSION_ID", lines);
@@ -55,22 +56,25 @@ pub fn extract_release_info(alloc:std.mem.Allocator, lines:std.ArrayList([]const
 test {
     const alloc = std.testing.allocator;
 
-    var lines = std.ArrayList([]const u8).init(alloc);
-    defer _ = lines.deinit();
+    var lines = freader.Lines.init(alloc);
+    defer lines.destroy();
 
     try lines.append("ID=zig\n");
     try lines.append("VERSION_ID=0.13.0\n");
-    try lines.append("ID_LIKE=c c++ rust\n");
+    try lines.append("ID_LIKE=c\n");
 
-    var info = try extract_release_info(alloc, lines);
-    defer _ = info.destroy();
+    var info = try extractReleaseInfo(alloc, lines);
+    defer info.destroy();
 
-    std.debug.print("OsInfo( '{s}' , '{s}' , '{s}' , '{s}' )\n", .{info.id, info.version_id, info.pretty_name, info.id_like});
+    try std.testing.expectEqualStrings("zig", info.id);
+    try std.testing.expectEqualStrings("0.13.0", info.version_id);
+    try std.testing.expectEqualStrings("[zig 0.13.0]", info.pretty_name);
+    try std.testing.expectEqualStrings("c", info.id_like);
 }
 
-fn find_value(key:[]const u8, lines:std.ArrayList([]const u8)) LineError![]const u8 {
+fn find_value(key:[]const u8, lines:freader.Lines) LineError![]const u8 {
     var idx:usize = 0;
-    for(lines.items) |line| {
+    for(lines.getLines()) |line| {
         idx = std.mem.indexOf(u8, line, "=") orelse 0;
         if(idx == 0) return LineError.NotValid;
 
@@ -85,7 +89,7 @@ fn find_value(key:[]const u8, lines:std.ArrayList([]const u8)) LineError![]const
     return LineError.NotFound;
 }
 
-fn find_value_defaulting(key: []const u8, lines:std.ArrayList([]const u8), default:[]const u8) LineError![]const u8 {
+fn find_value_defaulting(key: []const u8, lines:freader.Lines, default:[]const u8) LineError![]const u8 {
     return find_value(key, lines) catch |err| {
         if (err == LineError.NotFound) {
             return default;
@@ -99,8 +103,8 @@ fn find_value_defaulting(key: []const u8, lines:std.ArrayList([]const u8), defau
 test {
     const alloc = std.testing.allocator;
 
-    var lines = std.ArrayList([]const u8).init(alloc);
-    defer _ = lines.deinit();
+    var lines = freader.Lines.init(alloc);
+    defer lines.destroy();
 
     try lines.append("NAME=test\n");
     try lines.append("LANG=zig\n");

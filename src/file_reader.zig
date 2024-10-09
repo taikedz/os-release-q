@@ -26,7 +26,7 @@ pub const Lines = struct {
         try self.list.append(data_copy);
     }
 
-    pub fn getLines(self:*Lines) [][]const u8 {
+    pub fn getLines(self:*const Lines) [][]const u8 {
         return self.list.items;
     }
 };

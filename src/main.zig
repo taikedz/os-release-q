@@ -8,17 +8,18 @@ const osr_info = @import("release_info.zig");
 
 
 pub fn main() !void {
-    const gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
     const alloc = gpa.allocator();
 
-    const lines = etc_file.read_etc_release(alloc);
-    defer _ = lines.destroy(); // is this right ?
+    var lines = try etc_file.readEtcRelease(alloc);
+    defer lines.destroy();
 
-    const info = osr_info.extract_release_info(alloc, lines);
+    var info = try osr_info.extractReleaseInfo(alloc, lines);
+    defer info.destroy();
 
     // print desired mode
     // if `-l` , then convert to lower-case
-    try stdout.print("Start\n", .{});
+    try stdout.print("{s}\n", .{info.id});
 }
 
