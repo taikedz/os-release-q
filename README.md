@@ -13,20 +13,23 @@ Run `bash scripts/install.sh` to build and install. Requires Zig toolchain v0.13
 The following is intended to be the full set of operations:
 
 * `os-release` - print `<ID>:<VERSION_ID>`
+* `os-release name` - print `<ID>`
 * `os-release version` - print `<VERSION_ID>`
 * `os-release pretty` - print `<PRETTY_NAME>` if available, else `<NAME> <VERSION_ID>`
 * `os-release family` - print `<ID_LIKE>` if present, else print `<ID>`
-* `os-release container` - print `wsl`, `container` or `none-detected` as relevant
+* `os-release container` - print `WSL`, `Non-init` as relevant
     * WSL is identified by "WSL" being in the output of `uname -r`
     * Containerisation is identified by checking PID 1, and noting it being other than `init` or `systemd`. This is not necessarily reliable.
-    * `wsl` and `container` may both appear
+    * `WSL` and `Non-init` may both appear
 * options
-    * `--lower-case`, `-l` - convert output to lower-case
-* `os-release -v` - print version of `os-release` query tool and help, exit with status zero
+    * `os-release -l` - convert output to lower-case
+    * `os-release -v` - print version of `os-release` query tool and help, exit with status zero
 
 ## Local build
 
 Simply run `zig build` .
+
+The resulting file will be in `./zig-out/bin/os-release`
 
 ## Motivation
 
