@@ -1,5 +1,8 @@
 const std = @import("std");
 
+const osr_mem = @import("mem.zig");
+const own = osr_mem.own;
+
 pub const LineError = error {
     NotFound,
     NotValid
@@ -34,12 +37,6 @@ pub const OsInfo = struct {
         self._alloc.free(self.id_like);
     }
 };
-
-fn own(alloc:std.mem.Allocator, value:[]const u8) ![]u8 {
-    const val_p = try alloc.alloc(u8, value.len);
-    @memcpy(val_p, value);
-    return val_p;
-}
 
 pub fn extract_release_info(alloc:std.mem.Allocator, lines:std.ArrayList([]const u8)) !OsInfo {
     // All the following are slices into `lines` values
