@@ -2,7 +2,7 @@ set -euo pipefail
 
 HERE="$(dirname "$0")"
 
-cd "$HERE/.."
+cd "$HERE"
 
 has() {
     which "$1" >/dev/null
@@ -14,6 +14,7 @@ if [[ -n "${1:-}" ]]; then
 
     if ! has curl; then
         echo "Need 'curl' to download pre-compiled binary for v${1} from web."
+        exit 1
     fi
 
     curl -L "https://github.com/taikedz/os-release-q/releases/download/$1/os-release-$1" -o "$BUILD_DIR/os-release"
@@ -28,7 +29,7 @@ elif has zig; then
     zig build
 
 else
-    echo "Cannot build locally. Specify a version like '0.0.2' ."
+    echo "Cannot build locally. Specify a version like '0.2.0' ."
     exit 1
 fi
 

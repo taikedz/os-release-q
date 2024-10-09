@@ -4,7 +4,7 @@ A basic tool to print specific `/etc/os-release` details and other checks.
 
 ## Install
 
-Run `bash scripts/install.sh 0.0.2` to install from web
+Run `bash scripts/install.sh 0.2.0` to install from web
 
 Run `bash scripts/install.sh` to build and install. Requires Zig toolchain v0.13.0 .
 
