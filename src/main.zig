@@ -1,9 +1,8 @@
-const osr_version = "0.3.0"; // ALSO UPDATE build.zig.zon
-
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
 const ziglyph = @import("ziglyph");
 
+const ver = @import("version/version.zig");
 const etc_file = @import("etc_file.zig");
 const osr_info = @import("release_info.zig");
 const arguments = @import("arguments.zig");
@@ -27,7 +26,7 @@ pub fn main() !void {
 
     const fv = @intFromEnum(arguments.Flags.version);
     if(flags & fv  == fv) {
-        std.debug.print("os-release {s}\n", .{osr_version});
+        std.debug.print("os-release {s}\n", .{ver.osr_version});
         std.process.exit(0);
     }
 
