@@ -28,7 +28,7 @@ if [[ -n "${1:-}" ]]; then
 
 elif has zig; then
     BUILD_DIR=zig-out/bin
-    zig build
+    zig build -Doptimize=ReleaseSafe
 
 else
     echo "Cannot build locally. Specify a version like '0.2.0' ."
