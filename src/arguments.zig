@@ -25,7 +25,7 @@ fn eqs(left:[]const u8, right:[]const u8) bool {
 
 fn set_action(action:*Mode, new_value:Mode) void {
     if(action.* != Mode.empty) {
-        efail.fail(1, "Cannot set action {} - action is already {}\n", .{action.* , new_value});
+        efail.fail(1, "Cannot set action {} - action is already {}\n", .{new_value, action.*});
     }
 
     action.* = new_value;
