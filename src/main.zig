@@ -37,6 +37,8 @@ pub fn main() !void {
         lower = true;
     }
 
+    var free_local_output = false;
+
     switch(args) {
         arguments.Mode.empty => {
             var buf = [_]u8{undefined} ** 64;
@@ -46,19 +48,22 @@ pub fn main() !void {
         arguments.Mode.version => {output = info.version_id;},
         arguments.Mode.pretty => {output = info.pretty_name;},
         arguments.Mode.family => {output = info.id_like;},
-
-        // FIXME - This is a problem: it will need freeing independently, at end of program.
-        arguments.Mode.host => {output = try hostfeatures.get_features(alloc);},
+        arguments.Mode.host => {
+            output = try hostfeatures.get_features(alloc);
+            free_local_output = true;
+        },
     }
 
+    // We need this because of the "host" mode which has an locally-owned block of mem
+    defer { if(free_local_output) { alloc.free(output); } }
+
     if (lower) {
-        output = try ziglyph.toLowerStr(alloc, output);
-        defer alloc.free(output);
+        const new_output = try ziglyph.toLowerStr(alloc, output);
+        defer alloc.free(new_output);
         // This is a new allocation, and defer-free is to the end of this "if" block
         // So, we suffer some code duplication ...
-        try stdout.print("{s}\n", .{output});
+        try stdout.print("{s}\n", .{new_output});
     } else {
         try stdout.print("{s}\n", .{output});
     }
 }
-

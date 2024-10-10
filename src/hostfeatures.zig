@@ -8,29 +8,33 @@ const Lines = file_reader.Lines;
 pub fn get_features(alloc:std.mem.Allocator) ![]u8 {
     var features = std.ArrayList(u8).init(alloc);
     defer features.deinit();
-    const output = try file_reader.readFileLines(alloc, "/proc/1/cmdline");
+    var output = try file_reader.readFileLines(alloc, "/proc/1/cmdline");
     defer output.destroy();
 
-    const tokens = std.mem.splitScalar(u8, output.getLines()[0], '/');
-    const last = tokens[tokens.len-1];
+    var tokens = std.mem.splitScalar(u8, output.getLines()[0], '/');
+    const last = getLast(&tokens);
     if(!std.mem.eql(u8, last, "init") and !std.mem.eql(u8, last, "systemd")) {
-        features.appendSlice("Non-init ");
+        try features.appendSlice("Non-init ");
     }
 
-    if(is_wsl(alloc)) {
-        features.appendSlice("WSL ");
+    if(try is_wsl(alloc)) {
+        try features.appendSlice("WSL ");
     }
 
     return mem.own(alloc, features.items);
 }
 
-fn is_wsl() bool {
-    var buffer = [_]u8{undefined} ** 1024;
-    var alloc_t = std.heap.FixedBufferAllocator.init(&buffer);
-    const alloc = alloc_t.allocator();
-
-    const res = try commands.callCommand(alloc, [_][]u8{"uname", "-r"});
-
-    return std.mem.containsAtLeast(u8, res.items, 1, "WSL");
+fn getLast(tokens:*std.mem.SplitIterator(u8, .scalar)) []const u8 {
+    var last:[]const u8 = undefined;
+    while(tokens.*.next()) |tok| {
+        last = tok;
+    }
+    return last;
 }
 
+fn is_wsl(alloc:std.mem.Allocator) !bool {
+    const out = try commands.callCommand(alloc, &[_][]const u8{"uname", "-r"});
+    defer alloc.free(out);
+
+    return std.mem.containsAtLeast(u8, out, 1, "WSL");
+}
