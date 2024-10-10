@@ -6,7 +6,6 @@ const RunError = error {
 };
 
 pub fn callCommand(alloc:std.mem.Allocator, command:[]const[]const u8) !std.ArrayList(u8) {
-    // Broken - asking in : https://stackoverflow.com/q/79074019/2703818
     var caller = Child.init(command, alloc);
     caller.stdout_behavior = .Pipe;
     caller.stderr_behavior = .Pipe;
@@ -22,7 +21,7 @@ pub fn callCommand(alloc:std.mem.Allocator, command:[]const[]const u8) !std.Arra
     const res = try caller.wait();
 
     if(res.Exited > 0) {
-        std.debug.print("{s}\n", stderr.items);
+        std.debug.print("{s}\n", .{stderr.items});
         return RunError.Failed;
     } else {
         return stdout;
@@ -32,7 +31,11 @@ pub fn callCommand(alloc:std.mem.Allocator, command:[]const[]const u8) !std.Arra
 test {
     const alloc = std.testing.allocator;
 
-    const out = try callCommand(alloc, &[_][]const u8{"ls", "-l"});
+    const out = try callCommand(alloc, &[_][]const u8{"uname", "-r"});
     defer out.deinit();
     std.debug.print("{s}\n", .{out.items});
+
+    if(std.mem.containsAtLeast(u8, out.items, 1, "WSL")) {
+        std.debug.print("This is windows\n", .{});
+    }
 }
