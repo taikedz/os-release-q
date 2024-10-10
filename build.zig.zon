@@ -1,0 +1,14 @@
+.{
+    .name = "os-release",
+    .version = "0.3.0",
+    .paths = .{
+        "src",
+    },
+    .dependencies = .{
+        .ziglyph = .{
+            // Master at 10 Oct 2024
+            .url = "https://codeberg.org/dude_the_builder/ziglyph/archive/b89d43d1e3.tar.gz",
+            .hash = "12207831bce7d4abce57b5a98e8f3635811cfefd160bca022eb91fe905d36a02cf25",
+        }
+    },
+}
