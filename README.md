@@ -17,7 +17,7 @@ The following is intended to be the full set of operations:
 * `os-release version` - print `<VERSION_ID>`
 * `os-release pretty` - print `<PRETTY_NAME>` if available, else `<NAME> <VERSION_ID>`
 * `os-release family` - print `<ID_LIKE>` if present, else print `<ID>`
-* `os-release container` - print `WSL`, `Non-init` as relevant
+* `os-release host` - print `WSL`, `Non-init` as relevant
     * WSL is identified by "WSL" being in the output of `uname -r`
     * Containerisation is identified by checking PID 1, and noting it being other than `init` or `systemd`. This is not necessarily reliable.
     * `WSL` and `Non-init` may both appear

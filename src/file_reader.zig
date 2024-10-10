@@ -50,6 +50,7 @@ pub fn readFileLines(alloc:std.mem.Allocator, path:[]const u8) !Lines {
         line_buf_t.clearRetainingCapacity();
     } else |err| switch(err) {
         error.EndOfStream => {
+            try lines.append(line_buf_t.items);
             return lines;
         },
         else => return err,

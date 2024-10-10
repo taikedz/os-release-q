@@ -7,6 +7,7 @@ const ziglyph = @import("ziglyph");
 const etc_file = @import("etc_file.zig");
 const osr_info = @import("release_info.zig");
 const arguments = @import("arguments.zig");
+const hostfeatures = @import("hostfeatures.zig");
 
 
 pub fn main() !void {
@@ -45,6 +46,9 @@ pub fn main() !void {
         arguments.Mode.version => {output = info.version_id;},
         arguments.Mode.pretty => {output = info.pretty_name;},
         arguments.Mode.family => {output = info.id_like;},
+
+        // FIXME - This is a problem: it will need freeing independently, at end of program.
+        arguments.Mode.host => {output = try hostfeatures.get_features(alloc);},
     }
 
     if (lower) {
