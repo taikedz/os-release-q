@@ -9,12 +9,15 @@ pub fn build(b:*std.Build) void {
     });
 
     // Find the dependency named "zg" as declared in build.zg.zon
-    const zg = b.dependency("zg", .{});
+    const dep_zg = b.dependency("zg", .{});
 
     // Get the `CaseData` module from the `zg` dependency
     //   and register as importable module "zg_CaseData"
     // In project code, use @import("zg_CaseData")
-    exe.root_module.addImport("zg_CaseData", zg.module("CaseData"));
+    exe.root_module.addImport("zg_CaseData", dep_zg.module("CaseData"));
+
+    const dep_lr = b.dependency("lr", .{});
+    exe.root_module.addImport("linereader", dep_lr.module("zig-linereader"));
 
     b.installArtifact(exe);
 }
