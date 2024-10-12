@@ -23,6 +23,7 @@ The following is intended to be the full set of operations:
     * WSL is identified by "WSL" being in the output of `uname -r`
     * Containerisation is identified by checking PID 1, and noting it being other than `init` or `systemd`. This is not necessarily reliable.
     * `WSL` and `Non-init` may both appear
+    * May be an empty string
 * options
     * `os-release -l` - convert output to lower-case
     * `os-release -v` - print version of `os-release` query tool and help, exit with status zero
