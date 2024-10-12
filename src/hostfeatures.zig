@@ -8,7 +8,7 @@ const Lines = file_reader.Lines;
 pub fn get_features(alloc:std.mem.Allocator) ![]u8 {
     var features = std.ArrayList(u8).init(alloc);
     defer features.deinit();
-    var output = try file_reader.readFileLines(alloc, "/proc/1/cmdline");
+    var output = try file_reader.readFileLines(alloc, "/proc/1/cmdline"); // FIXME - use /proc/1/stat
     defer output.destroy();
 
     var tokens = std.mem.splitScalar(u8, output.getLines()[0], '/');

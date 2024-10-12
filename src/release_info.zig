@@ -20,8 +20,6 @@ pub const OsInfo = struct {
         // For sanity, take responsibility for this struct's own content.
         // The struct holds references to u8 slices which must persist with it, rather than be
         //  tied to the lifetime of something that may or may not get deallocated independently.
-        // FIXME - we assign the allocator during `new` , but really we should initialize with OsInfo(alloc){} ?
-        //         We should revisit this later, as a perhaps more advanced topic.
         return OsInfo {
             ._alloc = alloc,
             .id = try own(alloc, id),
