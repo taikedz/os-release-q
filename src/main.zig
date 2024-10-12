@@ -1,6 +1,6 @@
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
-const ziglyph = @import("ziglyph");
+const zg_CaseData = @import("zg_CaseData");
 
 const ver = @import("version/version.zig");
 const etc_file = @import("etc_file.zig");
@@ -57,8 +57,12 @@ pub fn main() !void {
     defer { if(free_local_output) { alloc.free(output); } }
 
     if (lower) {
-        const new_output = try ziglyph.toLowerStr(alloc, output);
+        var zg_case = try zg_CaseData.init(alloc);
+        defer zg_case.deinit();
+
+        const new_output = try zg_case.toLowerStr(alloc, output);
         defer alloc.free(new_output);
+
         // This is a new allocation, and defer-free is to the end of this "if" block
         // So, we suffer some code duplication ...
         try stdout.print("{s}\n", .{new_output});

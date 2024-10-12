@@ -23,8 +23,7 @@ pub const Lines = struct {
     }
 
     pub fn append(self:*Lines, data:[]const u8) !void {
-        const data_copy = try own(self.alloc, data);
-        try self.list.append(data_copy);
+        try self.list.append(try own(self.alloc, data));
     }
 
     pub fn getLines(self:*const Lines) [][]const u8 {
