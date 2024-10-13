@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const files = @import("file_reader.zig");
+const files = @import("linereader");
 
 pub fn readEtcRelease(alloc:std.mem.Allocator) !files.Lines {
     var lines = try files.readFileLines(alloc, "/etc/os-release");

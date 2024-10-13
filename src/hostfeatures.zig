@@ -2,8 +2,8 @@ const std = @import("std");
 const mem = @import("mem.zig");
 const commands = @import("commands.zig");
 
-const file_reader = @import("file_reader.zig");
-const Lines = file_reader.Lines;
+const linereader = @import("linereader");
+const Lines = linereader.Lines;
 
 const TokenError = error { NotEnough };
 
@@ -23,7 +23,7 @@ pub fn get_features(alloc:std.mem.Allocator) ![]u8 {
 
 
 fn isInit(alloc:std.mem.Allocator) !bool {
-    var output = try file_reader.readFileLines(alloc, "/proc/1/stat");
+    var output = try linereader.readFileLines(alloc, "/proc/1/stat");
     defer output.destroy();
 
     var tokens = std.mem.tokenizeScalar(u8, output.getLines()[0], ' ');

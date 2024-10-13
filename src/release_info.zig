@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const freader = @import("file_reader.zig");
+const Lines = @import("linereader").Lines;
 const osr_mem = @import("mem.zig");
 const own = osr_mem.own;
 
@@ -37,7 +37,7 @@ pub const OsInfo = struct {
     }
 };
 
-pub fn extractReleaseInfo(alloc:std.mem.Allocator, lines:freader.Lines) !OsInfo {
+pub fn extractReleaseInfo(alloc:std.mem.Allocator, lines:Lines) !OsInfo {
     const id          = try find_value("ID", lines);
     const version_id  = try find_value("VERSION_ID", lines);
 
@@ -55,7 +55,7 @@ pub fn extractReleaseInfo(alloc:std.mem.Allocator, lines:freader.Lines) !OsInfo 
 test {
     const alloc = std.testing.allocator;
 
-    var lines = freader.Lines.init(alloc);
+    var lines = Lines.init(alloc);
     defer lines.destroy();
 
     try lines.append("ID=zig\n");
@@ -71,7 +71,7 @@ test {
     try std.testing.expectEqualStrings("c", info.id_like);
 }
 
-fn find_value(key:[]const u8, lines:freader.Lines) LineError![]const u8 {
+fn find_value(key:[]const u8, lines:Lines) LineError![]const u8 {
     var idx:usize = 0;
     for(lines.getLines()) |line| {
         idx = std.mem.indexOf(u8, line, "=") orelse 0;
@@ -88,7 +88,7 @@ fn find_value(key:[]const u8, lines:freader.Lines) LineError![]const u8 {
     return LineError.NotFound;
 }
 
-fn find_value_defaulting(key: []const u8, lines:freader.Lines, default:[]const u8) LineError![]const u8 {
+fn find_value_defaulting(key: []const u8, lines:Lines, default:[]const u8) LineError![]const u8 {
     return find_value(key, lines) catch |err| {
         if (err == LineError.NotFound) {
             return default;
@@ -102,7 +102,7 @@ fn find_value_defaulting(key: []const u8, lines:freader.Lines, default:[]const u
 test {
     const alloc = std.testing.allocator;
 
-    var lines = freader.Lines.init(alloc);
+    var lines = Lines.init(alloc);
     defer lines.destroy();
 
     try lines.append("NAME=test\n");
