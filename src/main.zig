@@ -14,11 +14,16 @@ pub fn main() !void {
     defer _ = gpa.deinit();
     const alloc = gpa.allocator();
 
-    var lines = try etc_file.readEtcRelease(alloc);
-    defer lines.destroy();
-
-    var info = try osr_info.extractReleaseInfo(alloc, lines);
+    var info:osr_info.OsInfo = undefined;
     defer info.destroy();
+    {
+        // We only need the lines for building the OsInfo object
+        // Confine it to a block that we free as soon as we're done with it
+        var lines = try etc_file.readEtcRelease(alloc);
+        defer lines.destroy();
+
+        info = try osr_info.extractReleaseInfo(alloc, lines);
+    }
 
     var flags:u8 = 0;
     const args = arguments.load_cli_args(&flags);
