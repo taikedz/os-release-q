@@ -34,12 +34,8 @@ pub fn main() !void {
  
     // Holder for data that needs reaping from the current scope
     var owned_output:?[]const u8 = null;
-    defer {
-        if(owned_output != null) {
-            const value = owned_output orelse unreachable;
-            alloc.free(value);
-        }
-    }
+    // As an optional, only free it if it was assigned.
+    defer if(owned_output != null) alloc.free(owned_output.?);
 
     const fv = @intFromEnum(arguments.Flags.version);
     if(flags & fv  == fv) {
@@ -69,7 +65,7 @@ pub fn main() !void {
 
             // We pass the actual value to the non-repaing  output holder
             //   which references a section of owned_output that will itself be reaped.
-            output = owned_output orelse unreachable;
+            output = owned_output.?;
         },
     }
 
@@ -80,10 +76,18 @@ pub fn main() !void {
         const low_output = try zg_case.toLowerStr(alloc, output);
         defer alloc.free(low_output);
 
-        // This is a new allocation, and defer-free is to the end of this "if" block
-        // So, we suffer some code duplication ...
-        try stdout.print("{s}\n", .{low_output});
+        // Final operations with a locally-owned item
+        //   to free in current block
+        try finalPrint("{s}\n", .{low_output});
+
     } else {
-        try stdout.print("{s}\n", .{output});
+
+        // Final operations with an already-deferred dstroy()
+        try finalPrint("{s}\n", .{output});
     }
+}
+
+fn finalPrint(comptime fmt:[]const u8, params:anytype) !void {
+    // At the end of main() we duplicate the finalisation operation
+    try stdout.print(fmt, params);
 }
