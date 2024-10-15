@@ -48,10 +48,10 @@ pub fn load_cli_args(flags:*u8) Mode {
         else if(eqs(token, "pretty")) { set_action(&action, Mode.pretty); }
         else if(eqs(token, "family")) { set_action(&action, Mode.family); }
         else if(eqs(token, "host")) { set_action(&action, Mode.host); }
-        else if(eqs(token, "-v")) {
-            flags.* |= @intFromEnum(Flags.version) ;
-        }
+
+        else if(eqs(token, "-v")) { flags.* |= @intFromEnum(Flags.version) ; }
         else if(eqs(token, "-l")) { flags.* |= @intFromEnum(Flags.lower) ; }
+
         else {
             efail.fail(1, "Unrecognized argument: {s}\n", .{token});
         }
